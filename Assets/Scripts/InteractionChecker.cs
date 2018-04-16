@@ -19,7 +19,7 @@ public class InteractionChecker : MonoBehaviour {
         if (collision.CompareTag("Player"))
         {
             if (gameObject.CompareTag("Collect"))
-                Destroy(gameObject);
+                gameObject.SetActive(false);
 
             if (gameObject.CompareTag("Avoid"))
                 collision.gameObject.transform.position = new Vector3(0.22f, 0, 0);
@@ -30,7 +30,7 @@ public class InteractionChecker : MonoBehaviour {
                 bool feet_above_me = collision.gameObject.transform.position.y - playerSprite.bounds.extents.y - gameObject.transform.position.y > 0;
                 if (feet_above_me)
                 {
-                    Destroy(gameObject);
+                    gameObject.SetActive(false);
                 }
                 else
                 {

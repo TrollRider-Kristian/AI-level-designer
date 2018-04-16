@@ -8,13 +8,22 @@ public class HeroPlaceholderBehavior : MonoBehaviour {
 
     Animator heroPlaceholderAnimator;
 
-	// Use this for initialization
-	void Start () {
+    //using this tutorial for jumping as well: https://unity3d.com/learn/tutorials/topics/2d-game-creation/2d-character-controllers
+    bool am_i_on_ground = false;
+    public Transform groundCheck;
+    float groundRadius = 0.2f;
+    public LayerMask whatIsGround;
+
+    // Use this for initialization
+    void Start () {
         heroPlaceholderAnimator = GetComponent<Animator>();
 	}
 	
 	// Because we're dealing with RigidBody2D:
 	void FixedUpdate () {
+        am_i_on_ground = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
+        heroPlaceholderAnimator.SetBool("Ground", am_i_on_ground);
+
         float move = Input.GetAxis("Horizontal");
         heroPlaceholderAnimator.SetFloat("speed", Mathf.Abs(move));
 
