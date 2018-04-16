@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HeroPlaceholdeerBehavior : MonoBehaviour {
+public class HeroPlaceholderBehavior : MonoBehaviour {
     public float maxSpeed = 10f;
     bool facingRight = true;
 
