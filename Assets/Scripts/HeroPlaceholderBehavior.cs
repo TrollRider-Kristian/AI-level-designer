@@ -45,6 +45,10 @@ public class HeroPlaceholderBehavior : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
+        //check if we've fallen too far
+        if (gameObject.transform.position.y < -37.0f)
+            gameObject.transform.position = new Vector3(0.1f, 0.1f, 0.1f);
+
         if ((am_i_on_ground || (allow_doublejump && jumps_in_air < 1)) && (Input.GetKeyDown(KeyCode.W) || (Input.GetKeyDown(KeyCode.UpArrow))))
         {
             heroPlaceholderAnimator.SetBool("Ground", false);
