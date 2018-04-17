@@ -45,7 +45,7 @@ public class HeroPlaceholderBehavior : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        if ((am_i_on_ground || (allow_doublejump && jumps_in_air < 1)) && Input.GetKeyDown(KeyCode.W))
+        if ((am_i_on_ground || (allow_doublejump && jumps_in_air < 1)) && (Input.GetKeyDown(KeyCode.W) || (Input.GetKeyDown(KeyCode.UpArrow))))
         {
             heroPlaceholderAnimator.SetBool("Ground", false);
             Rigidbody2D rigidbody2D = GetComponent<Rigidbody2D>();
@@ -81,7 +81,7 @@ public class HeroPlaceholderBehavior : MonoBehaviour {
         {
             Debug.Log("Rocket Maaaaaan!");
             maxSpeed = 2.02f;
-            jumpForce = 520.0f;
+            jumpForce = 620.0f;
             allow_doublejump = true;
         }
 
