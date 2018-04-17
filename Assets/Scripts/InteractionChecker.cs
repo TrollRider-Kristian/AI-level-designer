@@ -37,6 +37,13 @@ public class InteractionChecker : MonoBehaviour {
                     collision.gameObject.transform.position = new Vector3(0.22f, 0, 0);
                 }
             }
+
+            if (gameObject.CompareTag("Victory"))
+            {
+                gameObject.SetActive(false);
+                collision.gameObject.SetActive(false);
+                Debug.Log("YOU WIN!!"); //insert victory splash screen here.
+            }
         }
     }
 }

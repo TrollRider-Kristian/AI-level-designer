@@ -323,6 +323,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSpeed: 3
+  jumpForce: 500
+  allow_doublejump: 0
   groundCheck: {fileID: 1620497506}
   whatIsGround:
     serializedVersion: 2
@@ -370,9 +372,10 @@ MonoBehaviour:
   moving_agents:
   - {fileID: 1516906128109108, guid: 636dce7487a8c634191f0e5143cee864, type: 2}
   - {fileID: 1819628536233960, guid: 9b0a33c6aced9f54d8f92eaaae398130, type: 2}
+  - {fileID: 1088835909713914, guid: ff22177f3a8b3004986bcb525bd01ce5, type: 2}
   landscapes:
   - {fileID: 1140160304859684, guid: a894d221528aae9409789ec480a19d90, type: 2}
-  - {fileID: 1088835909713914, guid: ff22177f3a8b3004986bcb525bd01ce5, type: 2}
+  flag: {fileID: 1017688788669566, guid: 3f8c56f6c798aeb40a3e893aa4909c7c, type: 2}
 --- !u!1 &1234407995
 GameObject:
   m_ObjectHideFlags: 0

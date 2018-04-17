@@ -7,6 +7,7 @@ TagManager:
   - Defeat
   - Avoid
   - Collect
+  - Victory
   layers:
   - Default
   - TransparentFX

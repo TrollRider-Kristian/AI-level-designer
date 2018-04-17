@@ -16,6 +16,7 @@ public class PlacementOfAgents : MonoBehaviour
 {
     public GameObject[] moving_agents;
     public GameObject[] landscapes;
+    public GameObject flag;
 
     //control points first Bezier Curve:
     float x1, y1, x2, y2, x3, y3, x4, y4;
@@ -56,6 +57,7 @@ public class PlacementOfAgents : MonoBehaviour
         d4 = Random.Range(-7.2f, 7.2f);
 
         placeAgents(Random.Range(2, 4));
+        place_goalpost();
     }
 
     // Update is called once per frame
@@ -75,7 +77,7 @@ public class PlacementOfAgents : MonoBehaviour
             if (t < 0.4 || t > 0.6)
             {
                 u = 1.0f - t;
-                v = Random.Range(0.1f, 1.0f);
+                v = Random.Range(0.3f, 0.7f);
             }
             else
             {
@@ -114,11 +116,23 @@ public class PlacementOfAgents : MonoBehaviour
     {
         GameObject monster, landscape;
         SpriteRenderer land_under_me, widthscape;
-        monster = Instantiate(moving_agents[Random.Range(0, landscapes.Length)], transform.position, transform.rotation) as GameObject;
+        monster = Instantiate(moving_agents[Random.Range(0, moving_agents.Length)], transform.position, transform.rotation) as GameObject;
         monster.transform.position = new Vector3(xLoc, yLoc, 0);
         landscape = Instantiate(landscapes[0], transform.position, transform.rotation) as GameObject;
         land_under_me = monster.GetComponent<SpriteRenderer>();
         widthscape = landscape.GetComponent<SpriteRenderer>();
         landscape.transform.position = monster.transform.position - new Vector3(0, land_under_me.bounds.extents.y + 2 * widthscape.bounds.extents.y, 0);
+    }
+
+    void place_goalpost()
+    {
+        GameObject landscape;
+        SpriteRenderer land_under_me, widthscape;
+        flag = Instantiate(flag, transform.position, transform.rotation) as GameObject;
+        flag.transform.position = new Vector3(x4, y4, 0);
+        landscape = Instantiate(landscapes[0], transform.position, transform.rotation) as GameObject;
+        land_under_me = flag.GetComponent<SpriteRenderer>();
+        widthscape = landscape.GetComponent<SpriteRenderer>();
+        landscape.transform.position = flag.transform.position - new Vector3(0, land_under_me.bounds.extents.y + 2 * widthscape.bounds.extents.y, 0);
     }
 }
