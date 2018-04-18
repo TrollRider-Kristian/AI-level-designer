@@ -49,6 +49,8 @@ public class HeroPlaceholderBehavior : MonoBehaviour {
         if (gameObject.transform.position.y < -37.0f)
             gameObject.transform.position = new Vector3(0.1f, 0.1f, 0.1f);
 
+        //TODO: should I allow the character to change movement style while in the air (y/n)?
+
         if ((am_i_on_ground || (allow_doublejump && jumps_in_air < 1)) && (Input.GetKeyDown(KeyCode.W) || (Input.GetKeyDown(KeyCode.UpArrow))))
         {
             heroPlaceholderAnimator.SetBool("Ground", false);
@@ -83,7 +85,7 @@ public class HeroPlaceholderBehavior : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Alpha4))
         {
-            Debug.Log("Rocket Maaaaaan!");
+            Debug.Log("Rocket Man!");
             maxSpeed = 2.02f;
             jumpForce = 620.0f;
             allow_doublejump = true;
@@ -91,7 +93,7 @@ public class HeroPlaceholderBehavior : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Alpha5))
         {
-            Debug.Log("Default w/ double jump");
+            Debug.Log("Default w/ two half jumps");
             maxSpeed = 6.7f;
             jumpForce = 262.0f;
             allow_doublejump = true;

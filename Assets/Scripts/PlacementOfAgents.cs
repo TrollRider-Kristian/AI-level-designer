@@ -28,7 +28,23 @@ public class PlacementOfAgents : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        //first
+        define_first_Bezier();
+        define_second_Bezier();
+        define_third_Bezier();
+        //TODO:
+        //capture a Sprite from the drawing screen after having X drawing screens, where X is the number of agents the user wishes to define for our game
+        //use a button to go from one drawing to the next, once the last button is clicked and the moving agents array is loaded, then load the game level
+        load_gameLevel(Random.Range(2, 4));
+    }
+
+    // Update is called once per frame
+    void Update ()
+    {
+		
+	}
+
+    void define_first_Bezier()
+    {
         x1 = 0.0f;
         y1 = 0.0f;
         x2 = 15.0f;
@@ -37,7 +53,10 @@ public class PlacementOfAgents : MonoBehaviour
         y3 = Random.Range(-15.0f, 15.0f);
         x4 = 45.0f;
         y4 = Random.Range(-7.2f, 7.2f);
-        //second
+    }
+
+    void define_second_Bezier()
+    {
         a1 = 0.0f;
         b1 = 0.0f;
         a2 = 15.0f;
@@ -46,7 +65,10 @@ public class PlacementOfAgents : MonoBehaviour
         b3 = Random.Range(-15.0f, 15.0f);
         a4 = 45.0f;
         b4 = Random.Range(-7.2f, 7.2f);
-        //third
+    }
+
+    void define_third_Bezier()
+    {
         c1 = 0.0f;
         d1 = 0.0f;
         c2 = 15.0f;
@@ -55,17 +77,14 @@ public class PlacementOfAgents : MonoBehaviour
         d3 = Random.Range(-15.0f, 15.0f);
         c4 = 45.0f;
         d4 = Random.Range(-7.2f, 7.2f);
-
-        place_hero();
-        placeAgents(Random.Range(2, 4));
-        place_goalpost();
     }
 
-    // Update is called once per frame
-    void Update ()
+    void load_gameLevel(int agentsPerCurve)
     {
-		
-	}
+        place_hero();
+        placeAgents(agentsPerCurve);
+        place_goalpost();
+    }
 
     void place_hero()
     {
@@ -76,7 +95,8 @@ public class PlacementOfAgents : MonoBehaviour
 
     void placeAgents(int agentsPerCurve)
     {
-        //sample numbers between 0 and 1 to place agents on the curve
+        //sample numbers between 0 and 1 to place agents on the first curve
+        //determine second and third curve such that agents are "well distributed"
         for (int i = 0; i < agentsPerCurve; i++)
         {
             float t = Random.Range(0.1f, 1.0f);
