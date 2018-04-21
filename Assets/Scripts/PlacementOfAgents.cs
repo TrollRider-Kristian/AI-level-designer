@@ -14,6 +14,8 @@ using UnityEngine;
 
 public class PlacementOfAgents : MonoBehaviour
 {
+    public string how_many_sprites_to_load = "";
+
     public GameObject[] moving_agents;
     public GameObject[] landscapes;
     public GameObject hero, flag;
@@ -28,20 +30,33 @@ public class PlacementOfAgents : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        define_first_Bezier();
-        define_second_Bezier();
-        define_third_Bezier();
+        //we want to put this in Update, but we only want to do this once
+        //define_first_Bezier();
+        //define_second_Bezier();
+        //define_third_Bezier();
         //TODO:
         //capture a Sprite from the drawing screen after having X drawing screens, where X is the number of agents the user wishes to define for our game
         //use a button to go from one drawing to the next, once the last button is clicked and the moving agents array is loaded, then load the game level
-        load_gameLevel(Random.Range(2, 4));
+        //load_gameLevel(Random.Range(2, 4));
     }
 
     // Update is called once per frame
     void Update ()
     {
-		
+
 	}
+
+    private void OnGUI()
+    {
+        how_many_sprites_to_load = GUI.TextField(new Rect(950, 450, 150, 30), how_many_sprites_to_load);
+        if(how_many_sprites_to_load.Length > 0)
+        {
+            moving_agents = new GameObject[int.Parse(how_many_sprites_to_load)];
+            Debug.Log(moving_agents.Length);
+        }
+        //how to make this disappear when input is given and "Next" is clicked, put an if condition for when string.length == 0 and next is not clicked, then instantiate the box.
+        //don't forget the splash images for "How many sprites?" and "You win!"
+    }
 
     void define_first_Bezier()
     {
@@ -140,6 +155,7 @@ public class PlacementOfAgents : MonoBehaviour
         return Mathf.Pow(1 - t, 3) * x1 + 3 * Mathf.Pow(1 - t, 2) * x2 * t + (1 - t) * x3 * Mathf.Pow(t, 2) + x4 * Mathf.Pow(t, 3);
     }
 
+    //VERY useful for the three below functions: https://answers.unity.com/questions/686840/how-to-instantiate-sprite-prefab-c.html
     void placeAgentsHelper(float xLoc, float yLoc)
     {
         GameObject monster = Instantiate(moving_agents[Random.Range(0, moving_agents.Length)], transform.position, transform.rotation) as GameObject;
