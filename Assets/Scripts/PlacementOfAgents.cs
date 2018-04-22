@@ -1,6 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEditor;
+
+// Using this video to specify input sprites to the game: https://www.youtube.com/watch?v=Vh_XkNwThg4
 
 // Use three Bezier Curves, https://en.wikipedia.org/wiki/B%C3%A9zier_curve 
 // to place enemy agents in the game.  Randomly determine control points at locations
@@ -14,7 +18,10 @@ using UnityEngine;
 
 public class PlacementOfAgents : MonoBehaviour
 {
-    public string how_many_sprites_to_load = "";
+    public InputField input_num_distinct_sprites;
+
+    //string which_path;
+    //public RawImage which_sprite;
 
     public GameObject[] moving_agents;
     public GameObject[] landscapes;
@@ -31,31 +38,42 @@ public class PlacementOfAgents : MonoBehaviour
 	void Start ()
     {
         //we want to put this in Update, but we only want to do this once
-        //define_first_Bezier();
-        //define_second_Bezier();
-        //define_third_Bezier();
+        define_first_Bezier();
+        define_second_Bezier();
+        define_third_Bezier();
         //TODO:
         //capture a Sprite from the drawing screen after having X drawing screens, where X is the number of agents the user wishes to define for our game
         //use a button to go from one drawing to the next, once the last button is clicked and the moving agents array is loaded, then load the game level
-        //load_gameLevel(Random.Range(2, 4));
+        load_gameLevel(Random.Range(2, 4));
     }
 
     // Update is called once per frame
     void Update ()
     {
-
+        
 	}
 
-    private void OnGUI()
+    public void nextClicked()
     {
-        how_many_sprites_to_load = GUI.TextField(new Rect(950, 450, 150, 30), how_many_sprites_to_load);
-        if(how_many_sprites_to_load.Length > 0)
+        if (input_num_distinct_sprites.text.Length > 0)
         {
-            moving_agents = new GameObject[int.Parse(how_many_sprites_to_load)];
-            Debug.Log(moving_agents.Length);
+            try
+            {
+                int num_distinct_sprites = int.Parse(input_num_distinct_sprites.text);
+                moving_agents = new GameObject[num_distinct_sprites];
+                input_num_distinct_sprites.DeactivateInputField();
+                input_num_distinct_sprites.gameObject.SetActive(false);
+                Debug.Log(moving_agents.Length); //load the raw image, hold a public variable for the number of times next was "successfully clicked".
+            }
+            catch (System.FormatException) { }
+            catch (System.OverflowException) { }
         }
-        //how to make this disappear when input is given and "Next" is clicked, put an if condition for when string.length == 0 and next is not clicked, then instantiate the box.
-        //don't forget the splash images for "How many sprites?" and "You win!"
+    }
+
+    public void OpenExplorer()
+    {
+        //which_path = EditorUtility.OpenFilePanel("Overwrite with png", "", "png");
+
     }
 
     void define_first_Bezier()
