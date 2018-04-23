@@ -44,13 +44,13 @@ public class PlacementOfAgents : MonoBehaviour
     float c1, d1, c2, d2, c3, d3, c4, d4;
 
     string path_to_sprite;
-    int num_input_sprite_screens;
+    int sprite_index;
 
     // Use this for initialization
     void Start()
     {
         path_to_sprite = "";
-        num_input_sprite_screens = 0;
+        sprite_index = 0;
         deactivate_sprite_loader();
     }
 
@@ -58,7 +58,6 @@ public class PlacementOfAgents : MonoBehaviour
     {
         deactivate_how_many_prompter();
         activate_sprite_buttons();
-        num_input_sprite_screens++;
         activate_radios_helper();
     }
 
@@ -110,11 +109,11 @@ public class PlacementOfAgents : MonoBehaviour
             }
             catch (System.FormatException)
             {
-                //handle bad formatting 
+                //handle bad formatting here
             }
             catch (System.OverflowException)
             {
-                //overflow input
+                //overflow input here
             }
         }
     }
@@ -133,63 +132,58 @@ public class PlacementOfAgents : MonoBehaviour
 
     public void nextSprite()
     {
-        if (num_input_sprite_screens <= moving_agents.Length)
+        GameObject agent_to_add = new GameObject("agent #" + sprite_index);
+
+        //https://forum.unity.com/threads/converting-texture-to-texture2d.25991/
+        Sprite sprite_to_handle = wrap_image_into_sprite(sprite_to_add.texture as Texture2D);
+        //https://forum.unity.com/threads/how-to-programmatically-add-sprite-to-spriterenderer.257990/
+        SpriteRenderer rend_agent = agent_to_add.AddComponent(typeof(SpriteRenderer)) as SpriteRenderer;
+        rend_agent.sprite = sprite_to_handle;
+        //move the transform far far away so it doesn't display on our screen until we want it to, since it's not a prefab
+        rend_agent.transform.position = new Vector3(-9000.0f, -9000.0f, -9000.0f);
+
+        if (collect_selected)
         {
-            int index = num_input_sprite_screens - 1;
-            GameObject agent_to_add = new GameObject("agent #" + index);
-
-            //https://forum.unity.com/threads/converting-texture-to-texture2d.25991/
-            Sprite sprite_to_handle = wrap_image_into_sprite(sprite_to_add.texture as Texture2D);
-            //https://forum.unity.com/threads/how-to-programmatically-add-sprite-to-spriterenderer.257990/
-            SpriteRenderer rend_agent = agent_to_add.AddComponent(typeof(SpriteRenderer)) as SpriteRenderer;
-            rend_agent.sprite = sprite_to_handle;
-            //move the transform far far away so it doesn't display on our screen until we want it to, since it's not a prefab
-            rend_agent.transform.position = new Vector3(-9000.0f, -9000.0f, -9000.0f);
-
-            if (collect_selected)
-            {
-                agent_to_add.tag = "Collect";
-            }
-
-            if (avoid_selected)
-            {
-                agent_to_add.tag = "Avoid";
-            }
-
-            if (!defeat_selected)
-            {
-                BoxCollider2D col = agent_to_add.AddComponent(typeof(BoxCollider2D)) as BoxCollider2D;
-                col.isTrigger = true;
-            }
-
-            if (defeat_selected)
-            {
-                agent_to_add.tag = "Defeat";
-                //https://answers.unity.com/questions/774087/how-to-create-change-edge-collider-from-code.html 
-                EdgeCollider2D col = agent_to_add.AddComponent(typeof(EdgeCollider2D)) as EdgeCollider2D;
-                List<Vector2> col_pts = new List<Vector2>();
-                col_pts.Add(new Vector2(-1.0f, 0.0f));
-                col_pts.Add(new Vector2(-1.0f, 1.0f));
-                col_pts.Add(new Vector2(1.0f, 1.0f)); 
-                col_pts.Add(new Vector2(1.0f, 0.0f));
-                col.points = col_pts.ToArray();
-                col.isTrigger = true;
-            }
-
-            //https://answers.unity.com/questions/1136397/how-to-add-a-script-to-a-gameobject-during-runtime.html
-            InteractionChecker script = agent_to_add.AddComponent<InteractionChecker>();
-
-            moving_agents[index] = agent_to_add;
-            Debug.Log("We are on index: " + index); //why are we displaying an extra screen? or accessing a null pointer?
-            
-            num_input_sprite_screens++;
-            clear_sprite_helper();
+            agent_to_add.tag = "Collect";
         }
-        else
+
+        if (avoid_selected)
+        {
+            agent_to_add.tag = "Avoid";
+        }
+
+        if (!defeat_selected)
+        {
+            BoxCollider2D col = agent_to_add.AddComponent(typeof(BoxCollider2D)) as BoxCollider2D;
+            col.isTrigger = true;
+        }
+
+        if (defeat_selected)
+        {
+            agent_to_add.tag = "Defeat";
+            //https://answers.unity.com/questions/774087/how-to-create-change-edge-collider-from-code.html 
+            EdgeCollider2D col = agent_to_add.AddComponent(typeof(EdgeCollider2D)) as EdgeCollider2D;
+            List<Vector2> col_pts = new List<Vector2>();
+            col_pts.Add(new Vector2(-1.0f, -0.5f));
+            col_pts.Add(new Vector2(-1.0f, 1.0f));
+            col_pts.Add(new Vector2(1.0f, 1.0f)); 
+            col_pts.Add(new Vector2(1.0f, -0.5f));
+            col.points = col_pts.ToArray();
+            col.isTrigger = true;
+        }
+
+        //https://answers.unity.com/questions/1136397/how-to-add-a-script-to-a-gameobject-during-runtime.html
+        InteractionChecker script = agent_to_add.AddComponent<InteractionChecker>();
+        Debug.Log("Now adding sprite at index: " + sprite_index);
+        moving_agents[sprite_index] = agent_to_add;
+        sprite_index++;
+        clear_sprite_helper();
+
+        if (sprite_index >= moving_agents.Length)
         {
             deactivate_sprite_loader();
             loadEntireGame(Random.Range(2, 4));
-        }
+        } 
     }
 
     void clear_sprite_helper()
