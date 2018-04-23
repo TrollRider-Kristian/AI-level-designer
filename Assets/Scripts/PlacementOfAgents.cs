@@ -45,26 +45,14 @@ public class PlacementOfAgents : MonoBehaviour
 
     string path_to_sprite;
     int num_input_sprite_screens;
-    bool load_game_now;
 
     // Use this for initialization
     void Start()
     {
         path_to_sprite = "";
         num_input_sprite_screens = 0;
-        load_game_now = false;
         deactivate_sprite_loader();
     }
-
-    // Update is called once per frame
-    void Update ()
-    {
-        if (load_game_now)
-        {
-            loadEntireGame(Random.Range(2, 4));
-            load_game_now = false;
-        }
-	}
 
     void activate_sprite_loader()
     {
@@ -139,25 +127,66 @@ public class PlacementOfAgents : MonoBehaviour
         {
             WWW www = new WWW("file:///" + path_to_sprite);
             sprite_to_add.texture = www.texture;
-            //Texture2D current_sprite = sprite_to_add.texture as Texture2D; //you wrap this piece into a sprite
         }
 
     }
 
     public void nextSprite()
     {
-        //make a sprite from that object, add the necessary game components,  
-        // set movingAgents[i] = that, clear the raw image, and do it all again for a number of times equal to the length of movingAgents.
+        if (num_input_sprite_screens <= moving_agents.Length)
+        {
+            int index = num_input_sprite_screens - 1;
+            GameObject agent_to_add = new GameObject("agent #" + index);
 
-        //add sprite renderer component
-        //add tag based on boolean
-        //add collision component based on tag, box collision for collect/avoid versus line collision on top of sprite for defeat
-        //add script component (same for everyone)
-        //is it the right size in the game?
-        Sprite sprite_to_handle = wrap_image_into_sprite(sprite_to_add.texture as Texture2D);
+            //https://forum.unity.com/threads/converting-texture-to-texture2d.25991/
+            Sprite sprite_to_handle = wrap_image_into_sprite(sprite_to_add.texture as Texture2D);
+            //https://forum.unity.com/threads/how-to-programmatically-add-sprite-to-spriterenderer.257990/
+            SpriteRenderer rend_agent = agent_to_add.AddComponent(typeof(SpriteRenderer)) as SpriteRenderer;
+            rend_agent.sprite = sprite_to_handle; //why is it displaying where the hero is supposed to be?
 
-        Debug.Log("We are on the " + num_input_sprite_screens + "th sprite"); //should be index num_input_sprite_screens - 1 in moving_agents
-        clear_sprite_helper();
+            if (collect_selected)
+            {
+                agent_to_add.tag = "Collect";
+            }
+
+            if (avoid_selected)
+            {
+                agent_to_add.tag = "Avoid";
+            }
+
+            if (!defeat_selected)
+            {
+                BoxCollider2D col = agent_to_add.AddComponent(typeof(BoxCollider2D)) as BoxCollider2D;
+                col.isTrigger = true;
+            }
+
+            if (defeat_selected)
+            {
+                agent_to_add.tag = "Defeat";
+                //https://answers.unity.com/questions/774087/how-to-create-change-edge-collider-from-code.html 
+                EdgeCollider2D col = agent_to_add.AddComponent(typeof(EdgeCollider2D)) as EdgeCollider2D;
+                List<Vector2> col_pts = new List<Vector2>();
+                col_pts.Add(new Vector2(-1.0f, 0.0f));
+                col_pts.Add(new Vector2(-1.0f, 1.0f));
+                col_pts.Add(new Vector2(1.0f, 1.0f)); //need better collision points
+                col_pts.Add(new Vector2(1.0f, 0.0f));
+                col.points = col_pts.ToArray();
+                col.isTrigger = true;
+            }
+
+            //https://answers.unity.com/questions/1136397/how-to-add-a-script-to-a-gameobject-during-runtime.html
+            InteractionChecker script = agent_to_add.AddComponent<InteractionChecker>();
+
+            moving_agents[index] = agent_to_add;
+            Debug.Log("We are on index: " + index); //why are we displaying an extra screen? or accessing a null pointer?
+            num_input_sprite_screens++;
+            clear_sprite_helper();
+        }
+        else
+        {
+            deactivate_sprite_loader();
+            loadEntireGame(Random.Range(2, 4));
+        }
     }
 
     void clear_sprite_helper()
@@ -168,9 +197,7 @@ public class PlacementOfAgents : MonoBehaviour
 
     Sprite wrap_image_into_sprite(Texture2D tex)
     {
-        float wid = tex.width;
-        float hei = tex.height;
-        return Sprite.Create(tex, new Rect(0, 0, wid, hei), new Vector2(wid / 2, hei / 2));
+        return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
     }
 
     public void select_collect()

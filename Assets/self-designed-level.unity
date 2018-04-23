@@ -1243,10 +1243,7 @@ MonoBehaviour:
   radio_collect: {fileID: 476408631}
   radio_avoid: {fileID: 264548394}
   radio_defeat: {fileID: 356083896}
-  moving_agents:
-  - {fileID: 1516906128109108, guid: 636dce7487a8c634191f0e5143cee864, type: 2}
-  - {fileID: 1819628536233960, guid: 9b0a33c6aced9f54d8f92eaaae398130, type: 2}
-  - {fileID: 1088835909713914, guid: ff22177f3a8b3004986bcb525bd01ce5, type: 2}
+  moving_agents: []
   landscapes:
   - {fileID: 1140160304859684, guid: a894d221528aae9409789ec480a19d90, type: 2}
   hero: {fileID: 1996861245483608, guid: dff91d777a6cd484cac60ab730d17983, type: 2}
