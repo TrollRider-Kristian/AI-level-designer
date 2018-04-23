@@ -68,12 +68,27 @@ public class PlacementOfAgents : MonoBehaviour
 
     void activate_sprite_loader()
     {
-        input_num_distinct_sprites.gameObject.SetActive(false);
-        nextButton.gameObject.SetActive(false);
+        deactivate_how_many_prompter();
+        activate_sprite_buttons();
+        num_input_sprite_screens++;
+        activate_radios_helper();
+    }
+
+    void activate_sprite_buttons()
+    {
         sprite_to_add.gameObject.SetActive(true);
         browse_for_sprites.gameObject.SetActive(true);
         next_sprite.gameObject.SetActive(true);
-        num_input_sprite_screens++;
+    }
+
+    void deactivate_how_many_prompter()
+    {
+        input_num_distinct_sprites.gameObject.SetActive(false);
+        nextButton.gameObject.SetActive(false);
+    }
+
+    void activate_radios_helper()
+    {
         radio_collect.gameObject.SetActive(true);
         radio_avoid.gameObject.SetActive(true);
         radio_defeat.gameObject.SetActive(true);
@@ -85,6 +100,11 @@ public class PlacementOfAgents : MonoBehaviour
         sprite_to_add.gameObject.SetActive(false);
         browse_for_sprites.gameObject.SetActive(false);
         next_sprite.gameObject.SetActive(false);
+        deactivate_radios_helper();
+    }
+
+    void deactivate_radios_helper()
+    {
         radio_collect.gameObject.SetActive(false);
         radio_avoid.gameObject.SetActive(false);
         radio_defeat.gameObject.SetActive(false);
@@ -120,8 +140,6 @@ public class PlacementOfAgents : MonoBehaviour
             WWW www = new WWW("file:///" + path_to_sprite);
             sprite_to_add.texture = www.texture;
             //Texture2D current_sprite = sprite_to_add.texture as Texture2D; //you wrap this piece into a sprite
-            //Texture2D new_texture = new Texture2D(sprite_to_add.texture.width, sprite_to_add.texture.height);
-            //sprite_to_add.texture = new_texture as Texture; //this is how you clear images. :)
         }
 
     }
@@ -130,12 +148,19 @@ public class PlacementOfAgents : MonoBehaviour
     {
         //check if image is valid, if so, then make a sprite from that object, add the necessary game components,  
         // set movingAgents[i] = that, clear the raw image, and do it all again for a number of times equal to the length of movingAgents.
-        //if not, then do not advance.
 
         //add sprite renderer component
         //add tag based on boolean (defeat is default, so that should be red...how to...)
         //add collision component based on tag
         //add script component
+        Debug.Log("We are on the " + num_input_sprite_screens + "th sprite");
+        clear_sprite_helper();
+    }
+
+    void clear_sprite_helper()
+    {
+        Texture blank = new Texture2D(sprite_to_add.texture.width, sprite_to_add.texture.height) as Texture;
+        sprite_to_add.texture = blank;
     }
 
     public void select_collect()
