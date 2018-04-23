@@ -142,7 +142,9 @@ public class PlacementOfAgents : MonoBehaviour
             Sprite sprite_to_handle = wrap_image_into_sprite(sprite_to_add.texture as Texture2D);
             //https://forum.unity.com/threads/how-to-programmatically-add-sprite-to-spriterenderer.257990/
             SpriteRenderer rend_agent = agent_to_add.AddComponent(typeof(SpriteRenderer)) as SpriteRenderer;
-            rend_agent.sprite = sprite_to_handle; //why is it displaying where the hero is supposed to be?
+            rend_agent.sprite = sprite_to_handle;
+            //move the transform far far away so it doesn't display on our screen until we want it to, since it's not a prefab
+            rend_agent.transform.position = new Vector3(-9000.0f, -9000.0f, -9000.0f);
 
             if (collect_selected)
             {
@@ -168,7 +170,7 @@ public class PlacementOfAgents : MonoBehaviour
                 List<Vector2> col_pts = new List<Vector2>();
                 col_pts.Add(new Vector2(-1.0f, 0.0f));
                 col_pts.Add(new Vector2(-1.0f, 1.0f));
-                col_pts.Add(new Vector2(1.0f, 1.0f)); //need better collision points
+                col_pts.Add(new Vector2(1.0f, 1.0f)); 
                 col_pts.Add(new Vector2(1.0f, 0.0f));
                 col.points = col_pts.ToArray();
                 col.isTrigger = true;
@@ -179,6 +181,7 @@ public class PlacementOfAgents : MonoBehaviour
 
             moving_agents[index] = agent_to_add;
             Debug.Log("We are on index: " + index); //why are we displaying an extra screen? or accessing a null pointer?
+            
             num_input_sprite_screens++;
             clear_sprite_helper();
         }
