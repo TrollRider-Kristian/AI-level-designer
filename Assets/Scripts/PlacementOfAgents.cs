@@ -146,14 +146,17 @@ public class PlacementOfAgents : MonoBehaviour
 
     public void nextSprite()
     {
-        //check if image is valid, if so, then make a sprite from that object, add the necessary game components,  
+        //make a sprite from that object, add the necessary game components,  
         // set movingAgents[i] = that, clear the raw image, and do it all again for a number of times equal to the length of movingAgents.
 
         //add sprite renderer component
-        //add tag based on boolean (defeat is default, so that should be red...how to...)
-        //add collision component based on tag
-        //add script component
-        Debug.Log("We are on the " + num_input_sprite_screens + "th sprite");
+        //add tag based on boolean
+        //add collision component based on tag, box collision for collect/avoid versus line collision on top of sprite for defeat
+        //add script component (same for everyone)
+        //is it the right size in the game?
+        Sprite sprite_to_handle = wrap_image_into_sprite(sprite_to_add.texture as Texture2D);
+
+        Debug.Log("We are on the " + num_input_sprite_screens + "th sprite"); //should be index num_input_sprite_screens - 1 in moving_agents
         clear_sprite_helper();
     }
 
@@ -161,6 +164,13 @@ public class PlacementOfAgents : MonoBehaviour
     {
         Texture blank = new Texture2D(sprite_to_add.texture.width, sprite_to_add.texture.height) as Texture;
         sprite_to_add.texture = blank;
+    }
+
+    Sprite wrap_image_into_sprite(Texture2D tex)
+    {
+        float wid = tex.width;
+        float hei = tex.height;
+        return Sprite.Create(tex, new Rect(0, 0, wid, hei), new Vector2(wid / 2, hei / 2));
     }
 
     public void select_collect()
