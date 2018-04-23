@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
 
-// Using this video to specify input sprites to the game: https://www.youtube.com/watch?v=Vh_XkNwThg4
-
 // Use three Bezier Curves, https://en.wikipedia.org/wiki/B%C3%A9zier_curve 
 // to place enemy agents in the game.  Randomly determine control points at locations
 // START -> (0, 0), (3, random(-5, 5)), (6, random(-5, 5)), (9, random(-2.5, 2.5)) <- GOAL for each curve.
@@ -19,9 +17,20 @@ using UnityEditor;
 public class PlacementOfAgents : MonoBehaviour
 {
     public InputField input_num_distinct_sprites;
+  
+    public RawImage sprite_to_add;
 
-    //string which_path;
-    //public RawImage which_sprite;
+    public Button nextButton;
+    public Button browse_for_sprites;
+    public Button next_sprite;
+
+    public Button radio_collect;
+    public Button radio_avoid;
+    public Button radio_defeat;
+
+    bool collect_selected;
+    bool avoid_selected;
+    bool defeat_selected;
 
     public GameObject[] moving_agents;
     public GameObject[] landscapes;
@@ -34,24 +43,52 @@ public class PlacementOfAgents : MonoBehaviour
     //control points third Bezier Curve:
     float c1, d1, c2, d2, c3, d3, c4, d4;
 
-	// Use this for initialization
-	void Start ()
+    string path_to_sprite;
+    int num_input_sprite_screens;
+    bool load_game_now;
+
+    // Use this for initialization
+    void Start()
     {
-        //we want to put this in Update, but we only want to do this once
-        define_first_Bezier();
-        define_second_Bezier();
-        define_third_Bezier();
-        //TODO:
-        //capture a Sprite from the drawing screen after having X drawing screens, where X is the number of agents the user wishes to define for our game
-        //use a button to go from one drawing to the next, once the last button is clicked and the moving agents array is loaded, then load the game level
-        load_gameLevel(Random.Range(2, 4));
+        path_to_sprite = "";
+        num_input_sprite_screens = 0;
+        load_game_now = false;
+        deactivate_sprite_loader();
     }
 
     // Update is called once per frame
     void Update ()
     {
-        
+        if (load_game_now)
+        {
+            loadEntireGame(Random.Range(2, 4));
+            load_game_now = false;
+        }
 	}
+
+    void activate_sprite_loader()
+    {
+        input_num_distinct_sprites.gameObject.SetActive(false);
+        nextButton.gameObject.SetActive(false);
+        sprite_to_add.gameObject.SetActive(true);
+        browse_for_sprites.gameObject.SetActive(true);
+        next_sprite.gameObject.SetActive(true);
+        num_input_sprite_screens++;
+        radio_collect.gameObject.SetActive(true);
+        radio_avoid.gameObject.SetActive(true);
+        radio_defeat.gameObject.SetActive(true);
+        select_defeat();
+    }
+
+    void deactivate_sprite_loader()
+    {
+        sprite_to_add.gameObject.SetActive(false);
+        browse_for_sprites.gameObject.SetActive(false);
+        next_sprite.gameObject.SetActive(false);
+        radio_collect.gameObject.SetActive(false);
+        radio_avoid.gameObject.SetActive(false);
+        radio_defeat.gameObject.SetActive(false);
+    }
 
     public void nextClicked()
     {
@@ -61,19 +98,85 @@ public class PlacementOfAgents : MonoBehaviour
             {
                 int num_distinct_sprites = int.Parse(input_num_distinct_sprites.text);
                 moving_agents = new GameObject[num_distinct_sprites];
-                input_num_distinct_sprites.DeactivateInputField();
-                input_num_distinct_sprites.gameObject.SetActive(false);
-                Debug.Log(moving_agents.Length); //load the raw image, hold a public variable for the number of times next was "successfully clicked".
+                activate_sprite_loader();
             }
-            catch (System.FormatException) { }
-            catch (System.OverflowException) { }
+            catch (System.FormatException)
+            {
+                //handle bad formatting 
+            }
+            catch (System.OverflowException)
+            {
+                //overflow input
+            }
         }
     }
 
+    // Using this video to specify input sprites to the game: https://www.youtube.com/watch?v=Vh_XkNwThg4
     public void OpenExplorer()
     {
-        //which_path = EditorUtility.OpenFilePanel("Overwrite with png", "", "png");
+        path_to_sprite = EditorUtility.OpenFilePanel("Overwrite with png", "", "png");
+        if (path_to_sprite.Length > 0)
+        {
+            WWW www = new WWW("file:///" + path_to_sprite);
+            sprite_to_add.texture = www.texture;
+            //Texture2D current_sprite = sprite_to_add.texture as Texture2D; //you wrap this piece into a sprite
+            //Texture2D new_texture = new Texture2D(sprite_to_add.texture.width, sprite_to_add.texture.height);
+            //sprite_to_add.texture = new_texture as Texture; //this is how you clear images. :)
+        }
 
+    }
+
+    public void nextSprite()
+    {
+        //check if image is valid, if so, then make a sprite from that object, add the necessary game components,  
+        // set movingAgents[i] = that, clear the raw image, and do it all again for a number of times equal to the length of movingAgents.
+        //if not, then do not advance.
+
+        //add sprite renderer component
+        //add tag based on boolean (defeat is default, so that should be red...how to...)
+        //add collision component based on tag
+        //add script component
+    }
+
+    public void select_collect()
+    {
+        collect_selected = true;
+        avoid_selected = false;
+        defeat_selected = false;
+
+        radio_collect.image.color = Color.red;
+        radio_avoid.image.color = Color.white;
+        radio_defeat.image.color = Color.white;
+    }
+
+    public void select_avoid()
+    {
+        collect_selected = false;
+        avoid_selected = true;
+        defeat_selected = false;
+
+        radio_collect.image.color = Color.white;
+        radio_avoid.image.color = Color.red;
+        radio_defeat.image.color = Color.white;
+    }
+
+    public void select_defeat()
+    {
+        collect_selected = false;
+        avoid_selected = false;
+        defeat_selected = true;
+
+        radio_collect.image.color = Color.white;
+        radio_avoid.image.color = Color.white;
+        radio_defeat.image.color = Color.red;
+    }
+
+    void loadEntireGame(int agentsPerCurve)
+    {
+        define_first_Bezier();
+        define_second_Bezier();
+        define_third_Bezier();
+        load_gameLevel(agentsPerCurve);
     }
 
     void define_first_Bezier()
