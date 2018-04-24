@@ -180,7 +180,7 @@ public class PlacementOfAgents : MonoBehaviour
         if (sprite_index >= moving_agents.Length)
         {
             deactivate_sprite_loader();
-            loadEntireGame(Random.Range(2, 4));
+            loadEntireGame(Random.Range(3, 5));
         } 
     }
 
