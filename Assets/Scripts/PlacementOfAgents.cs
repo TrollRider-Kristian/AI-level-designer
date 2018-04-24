@@ -11,9 +11,6 @@ using UnityEditor;
 // 3. If the random value t is less than 0.4 or greater than 0.6, add an agent along the second curve at 1 - t and a third on the third curve at random.
 //  Else add two agents on the second and third curves, one at t + t/2 and one at t - t/2.
 
-// 4. Which agent do we add?  We add up the sum of the areas of the image sizes for each agent so far, as well as the y location and determine a probability from that.
-// Make a dice roll to determine which one gets put there.
-
 public class PlacementOfAgents : MonoBehaviour
 {
     public InputField input_num_distinct_sprites;
@@ -34,7 +31,7 @@ public class PlacementOfAgents : MonoBehaviour
 
     public GameObject[] moving_agents;
     public GameObject[] landscapes;
-    public GameObject hero, flag;
+    public GameObject hero, flag, how_many;
 
     //control points first Bezier Curve:
     float x1, y1, x2, y2, x3, y3, x4, y4;
@@ -72,6 +69,7 @@ public class PlacementOfAgents : MonoBehaviour
     {
         input_num_distinct_sprites.gameObject.SetActive(false);
         nextButton.gameObject.SetActive(false);
+        how_many.gameObject.SetActive(false);
     }
 
     void activate_radios_helper()

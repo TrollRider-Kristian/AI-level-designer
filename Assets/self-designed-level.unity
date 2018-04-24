@@ -912,6 +912,48 @@ RectTransform:
   m_AnchoredPosition: {x: -305, y: -188}
   m_SizeDelta: {x: 221.75, y: 43.4}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1001 &554347024
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4351062193330984, guid: a83e6d969e470684d8e42afdda680921, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 22.022
+      objectReference: {fileID: 0}
+    - target: {fileID: 4351062193330984, guid: a83e6d969e470684d8e42afdda680921, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 7.417
+      objectReference: {fileID: 0}
+    - target: {fileID: 4351062193330984, guid: a83e6d969e470684d8e42afdda680921, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4351062193330984, guid: a83e6d969e470684d8e42afdda680921, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4351062193330984, guid: a83e6d969e470684d8e42afdda680921, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4351062193330984, guid: a83e6d969e470684d8e42afdda680921, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4351062193330984, guid: a83e6d969e470684d8e42afdda680921, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4351062193330984, guid: a83e6d969e470684d8e42afdda680921, type: 2}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: a83e6d969e470684d8e42afdda680921, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &717311760
 GameObject:
   m_ObjectHideFlags: 0
@@ -1251,6 +1293,7 @@ MonoBehaviour:
   - {fileID: 1140160304859684, guid: a894d221528aae9409789ec480a19d90, type: 2}
   hero: {fileID: 1996861245483608, guid: dff91d777a6cd484cac60ab730d17983, type: 2}
   flag: {fileID: 1017688788669566, guid: 3f8c56f6c798aeb40a3e893aa4909c7c, type: 2}
+  how_many: {fileID: 1916942361}
 --- !u!1 &1014763109
 GameObject:
   m_ObjectHideFlags: 0
@@ -1910,3 +1953,8 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1871380783}
+--- !u!1 &1916942361 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1884358238962060, guid: a83e6d969e470684d8e42afdda680921,
+    type: 2}
+  m_PrefabInternal: {fileID: 554347024}
