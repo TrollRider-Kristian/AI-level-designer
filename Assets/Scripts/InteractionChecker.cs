@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class InteractionChecker : MonoBehaviour {
 
-    public GameObject you_win;
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
@@ -35,8 +33,6 @@ public class InteractionChecker : MonoBehaviour {
                 gameObject.SetActive(false);
                 collision.gameObject.SetActive(false);
                 Debug.Log("YOU WIN!!");
-                Instantiate(you_win);
-                you_win.transform.position = new Vector3(41, 3, 0);
             }
         }
     }

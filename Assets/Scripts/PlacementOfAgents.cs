@@ -30,8 +30,10 @@ public class PlacementOfAgents : MonoBehaviour
     bool defeat_selected;
 
     public GameObject[] moving_agents;
+    List<GameObject> agents_in_game;
     public GameObject[] landscapes;
-    public GameObject hero, flag, how_many;
+    List<GameObject> landscapes_in_game;
+    public GameObject hero, flag, how_many, which_sprite, which_interaction, you_win;
 
     //control points first Bezier Curve:
     float x1, y1, x2, y2, x3, y3, x4, y4;
@@ -43,19 +45,74 @@ public class PlacementOfAgents : MonoBehaviour
     string path_to_sprite;
     int sprite_index;
 
+    bool game_is_playing, game_over;
+
+    bool flag_placed, hero_instantiated; //because the flag and hero are instantiated, we want to set them active instead of making new ones.
+
     // Use this for initialization
     void Start()
     {
+        agents_in_game = new List<GameObject>();
+        landscapes_in_game = new List<GameObject>();
+
         path_to_sprite = "";
         sprite_index = 0;
         deactivate_sprite_loader();
+        game_is_playing = false;
+        you_win.gameObject.SetActive(false);
+        game_over = false;
+
+        flag_placed = false;
+        hero_instantiated = false;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (game_is_playing && !flag.activeSelf && !game_over) //flag is not active, it's instantiated...
+        {
+            deactivate_old_game();
+            you_win.gameObject.SetActive(true);
+            game_over = true;
+        }
+
+        if (game_over && Input.GetKeyDown(KeyCode.Y))
+        {
+            game_is_playing = false;
+            you_win.gameObject.SetActive(false);
+            game_over = false;
+            loadEntireGame(Random.Range(3, 5)); 
+            hero.gameObject.SetActive(true); 
+            flag.gameObject.SetActive(true);
+        }
+
+        if (game_over && Input.GetKeyDown(KeyCode.N))
+        {
+            game_is_playing = false;
+            you_win.gameObject.SetActive(false);
+            game_over = false;
+            input_num_distinct_sprites.gameObject.SetActive(true);
+            nextButton.gameObject.SetActive(true);
+            how_many.gameObject.SetActive(true);
+        }
+    }
+
+    void deactivate_old_game()
+    {
+        agents_in_game.ForEach(ag => Destroy(ag));
+        agents_in_game.ForEach(ag => agents_in_game.Remove(ag));
+
+        landscapes_in_game.ForEach(la => Destroy(la));
+        landscapes_in_game.ForEach(la => landscapes_in_game.Remove(la));
     }
 
     void activate_sprite_loader()
     {
         deactivate_how_many_prompter();
+        activate_questions();
         activate_sprite_buttons();
         activate_radios_helper();
+        sprite_index = 0;
     }
 
     void activate_sprite_buttons()
@@ -63,6 +120,12 @@ public class PlacementOfAgents : MonoBehaviour
         sprite_to_add.gameObject.SetActive(true);
         browse_for_sprites.gameObject.SetActive(true);
         next_sprite.gameObject.SetActive(true);
+    }
+
+    void activate_questions()
+    {
+        which_sprite.gameObject.SetActive(true);
+        which_interaction.gameObject.SetActive(true);
     }
 
     void deactivate_how_many_prompter()
@@ -85,6 +148,8 @@ public class PlacementOfAgents : MonoBehaviour
         sprite_to_add.gameObject.SetActive(false);
         browse_for_sprites.gameObject.SetActive(false);
         next_sprite.gameObject.SetActive(false);
+        which_sprite.gameObject.SetActive(false);
+        which_interaction.gameObject.SetActive(false);
         deactivate_radios_helper();
     }
 
@@ -234,6 +299,7 @@ public class PlacementOfAgents : MonoBehaviour
         define_second_Bezier();
         define_third_Bezier();
         load_gameLevel(agentsPerCurve);
+        game_is_playing = true;
     }
 
     void define_first_Bezier()
@@ -281,7 +347,17 @@ public class PlacementOfAgents : MonoBehaviour
 
     void place_hero()
     {
-        hero = Instantiate(hero, transform.position, transform.rotation) as GameObject;
+        if (!hero_instantiated)
+        {
+            hero = Instantiate(hero, transform.position, transform.rotation) as GameObject;
+            hero_instantiated = true;
+        }
+
+        else
+        {
+            hero.gameObject.SetActive(true);
+        }
+
         hero.transform.position = new Vector3(0, 0, 0);
         land_placement_helper(hero);
     }
@@ -339,11 +415,23 @@ public class PlacementOfAgents : MonoBehaviour
         GameObject monster = Instantiate(moving_agents[Random.Range(0, moving_agents.Length)], transform.position, transform.rotation) as GameObject;
         monster.transform.position = new Vector3(xLoc, yLoc, 0);
         land_placement_helper(monster);
+
+        agents_in_game.Add(monster);
     }
 
     void place_goalpost()
     {
-        flag = Instantiate(flag, transform.position, transform.rotation) as GameObject;
+        if (!flag_placed)
+        {
+            flag = Instantiate(flag, transform.position, transform.rotation) as GameObject;
+            flag_placed = true;
+        }
+
+        else
+        {
+            flag.gameObject.SetActive(true);
+        }
+
         flag.transform.position = new Vector3(x4, y4, 0);
         land_placement_helper(flag);
     }
@@ -354,5 +442,7 @@ public class PlacementOfAgents : MonoBehaviour
         SpriteRenderer land_under_me = agent.GetComponent<SpriteRenderer>();
         SpriteRenderer widthscape = landscape.GetComponent<SpriteRenderer>();
         landscape.transform.position = agent.transform.position - new Vector3(0, land_under_me.bounds.extents.y + 2 * widthscape.bounds.extents.y, 0);
+
+        landscapes_in_game.Add(landscape);
     }
 }
