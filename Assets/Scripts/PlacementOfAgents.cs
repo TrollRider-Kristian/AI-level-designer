@@ -17,6 +17,8 @@ public class PlacementOfAgents : MonoBehaviour
   
     public RawImage sprite_to_add;
 
+    public Text how_many, which_sprite, which_interaction;
+
     public Button nextButton;
     public Button browse_for_sprites;
     public Button next_sprite;
@@ -33,7 +35,7 @@ public class PlacementOfAgents : MonoBehaviour
     List<GameObject> agents_in_game;
     public GameObject[] landscapes;
     List<GameObject> landscapes_in_game;
-    public GameObject hero, flag, how_many, which_sprite, which_interaction, you_win;
+    public GameObject hero, flag, you_win;
 
     //control points first Bezier Curve:
     float x1, y1, x2, y2, x3, y3, x4, y4;
@@ -57,6 +59,7 @@ public class PlacementOfAgents : MonoBehaviour
 
         path_to_sprite = "";
         sprite_index = 0;
+        how_many.gameObject.SetActive(true);
         deactivate_sprite_loader();
         game_is_playing = false;
         you_win.gameObject.SetActive(false);
