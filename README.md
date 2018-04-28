@@ -16,4 +16,4 @@ to open the game and hit the play button at the top of the screen.
 The project accepts png pictures to run.  The pictures you specify can come from anywhere in your hard drive.  
 For reference, the player controlled character is 50 pixels wide and 80 pixels tall.  
 
-During the level itself, use WSAD to move the character and 1-5 to change between character modes.  Have fun! :)
+When playing the level, use WSAD to move the character and 1-5 to change between character modes.  Have fun! :)
