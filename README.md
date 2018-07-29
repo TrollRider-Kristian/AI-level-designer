@@ -1,4 +1,4 @@
-# AI-level-designer
+# AI-level-designer (LEVEL X)
 Currently making a game that designs its own levels for a 2D platformer.
 
 Make sure you have Unity and Git installed from https://unity3d.com/ before you use this project.  
